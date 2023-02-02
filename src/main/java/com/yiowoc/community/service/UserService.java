@@ -8,9 +8,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     public int insertUser(User user) {
         return userMapper.insert(user);
+    }
+
+    public User selectUserByToken(String token) {
+        User user = userMapper.selectByToken(token);
+        return user;
     }
 }

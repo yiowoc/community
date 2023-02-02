@@ -7,4 +7,8 @@
     <insert id="insert" parameterType="user">
         insert into user (account_id, name, token, gmt_create, gmt_modified) values(#{accountId}, #{name}, #{token}, #{gmtCreate}, #{gmtModified})
     </insert>
+    <!-- public User selectByToken(String token); -->
+    <select id="selectByToken" resultType="user">
+        select * from user where token = #{token}
+    </select>
 </mapper>
