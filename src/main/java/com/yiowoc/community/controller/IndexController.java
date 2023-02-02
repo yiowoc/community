@@ -1,5 +1,6 @@
 package com.yiowoc.community.controller;
 
+import com.yiowoc.community.dto.PaginationDTO;
 import com.yiowoc.community.dto.QuestionDTO;
 import com.yiowoc.community.model.User;
 import com.yiowoc.community.service.QuestionService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +24,9 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String getIndex(HttpServletRequest request, Model model) {
+    public String getIndex(HttpServletRequest request, Model model,
+                           @RequestParam(name = "curPage", defaultValue = "1") Integer curPage,
+                           @RequestParam(name = "size", defaultValue = "5") Integer size) {
         Cookie[] cookies = request.getCookies();
         if(cookies != null && cookies.length != 0) {
             for(Cookie cookie: cookies) {
@@ -36,8 +40,8 @@ public class IndexController {
                 }
             }
         }
-        List<QuestionDTO> questionDTOs = questionService.selectQuestionWithUserList();
-        model.addAttribute("questions", questionDTOs);
+        PaginationDTO paginationDTO = questionService.selectQuestionWithUserList(curPage, size);
+        model.addAttribute("paginationDTO", paginationDTO);
         return "index";
     }
 }

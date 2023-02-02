@@ -8,9 +8,16 @@
         insert into question (title, description, gmt_create, gmt_modified, creator, tag)
         values (#{title}, #{description}, #{gmtCreate}, #{gmtModified}, #{creator}, #{tag})
     </insert>
-
     <!-- public List<Question> selectAllQuestions(); -->
     <select id="selectAllQuestions" resultType="question">
         select * from question
+    </select>
+    <!-- public List<Question> selectQuestionsByPage(Integer offset, Integer size); -->
+    <select id="selectQuestionsByPage" resultType="question">
+        select * from question limit #{offset}, #{size}
+    </select>
+    <!-- public int selectAllCount(); -->
+    <select id="selectAllCount" resultType="java.lang.Integer">
+        select count(1) from question
     </select>
 </mapper>
