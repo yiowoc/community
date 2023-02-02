@@ -35,7 +35,6 @@ public class AuthorizeController {
 
     @GetMapping("/callback")
     public String getCallback(@RequestParam(name = "code") String code,
-                              HttpServletRequest request,
                               HttpServletResponse response) {
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
@@ -53,9 +52,9 @@ public class AuthorizeController {
             user.setToken(token);
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
+            user.setAvatarUrl(githubUser.getAvatar_url());
             userService.insertUser(user);
             response.addCookie(new Cookie("token", token));
-//            request.getSession().setAttribute("user", githubUser);
         }
         return "redirect:/";
     }
