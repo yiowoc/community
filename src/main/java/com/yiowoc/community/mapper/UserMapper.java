@@ -8,4 +8,6 @@ public interface UserMapper {
     public int insert(User user);
 
     public User selectByToken(String token);
+
+    public User selectById(Integer id);
 }

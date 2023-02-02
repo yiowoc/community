@@ -8,4 +8,9 @@
         insert into question (title, description, gmt_create, gmt_modified, creator, tag)
         values (#{title}, #{description}, #{gmtCreate}, #{gmtModified}, #{creator}, #{tag})
     </insert>
+
+    <!-- public List<Question> selectAllQuestions(); -->
+    <select id="selectAllQuestions" resultType="question">
+        select * from question
+    </select>
 </mapper>

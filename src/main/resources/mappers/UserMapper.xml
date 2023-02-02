@@ -12,4 +12,8 @@
     <select id="selectByToken" resultType="user">
         select * from user where token = #{token}
     </select>
+    <!-- public User selectById(Integer creatorId); -->
+    <select id="selectById" resultType="user">
+        select * from user where id = #{id}
+    </select>
 </mapper>
