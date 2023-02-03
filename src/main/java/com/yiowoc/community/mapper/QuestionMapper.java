@@ -14,4 +14,5 @@ public interface QuestionMapper {
     List<Question> selectQuestionsPageByUserId(Integer userId, Integer offset, Integer size);
     Integer selectCountByUserId(Integer userId);
     Question selectQuestionById(Integer id);
+    void update(Question question);
 }

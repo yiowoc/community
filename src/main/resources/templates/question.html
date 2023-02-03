@@ -23,7 +23,7 @@
             <hr />
             <span th:text="${questionDTO.description}"></span>
             <hr />
-            <a class="menu-edit-question" th:href="@{'/question/'+${questionDTO.id}}" th:if="${session.user != null && session.user.id == questionDTO.creator}">
+            <a class="menu-edit-question" th:href="@{'/publish/'+${questionDTO.id}}" th:if="${session.user != null && session.user.id == questionDTO.creator}">
                 <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span>
             </a>
         </div>
