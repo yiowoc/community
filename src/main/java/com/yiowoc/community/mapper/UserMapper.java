@@ -5,9 +5,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserMapper {
-    public int insert(User user);
+    int insert(User user);
 
-    public User selectByToken(String token);
+    User selectByToken(String token);
 
-    public User selectById(Integer id);
+    User selectById(Integer id);
+
+    User selectByAccountId(String accountId);
+
+    void update(User user);
 }

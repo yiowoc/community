@@ -3,17 +3,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yiowoc.community.mapper.UserMapper">
-    <!-- public int insert(User user); -->
+    <!-- int insert(User user); -->
     <insert id="insert" parameterType="user">
         insert into user (account_id, name, token, gmt_create, gmt_modified, avatar_url)
         values(#{accountId}, #{name}, #{token}, #{gmtCreate}, #{gmtModified}, #{avatarUrl})
     </insert>
-    <!-- public User selectByToken(String token); -->
+    <!-- User selectByToken(String token); -->
     <select id="selectByToken" resultType="user">
         select * from user where token = #{token}
     </select>
-    <!-- public User selectById(Integer creatorId); -->
+    <!-- User selectById(Integer creatorId); -->
     <select id="selectById" resultType="user">
         select * from user where id = #{id}
     </select>
+    <!-- User selectByAccountId(String accountId); -->
+    <select id="selectByAccountId" resultType="user">
+        select * from user where account_id = #{accountId}
+    </select>
+    <!-- void update(User user); -->
+    <update id="update" parameterType="user">
+        update user set name = #{name}, avatar_url = #{avatarUrl}, token = #{token}, gmt_modified = #{gmtModified}
+        where account_id = #{accountId}
+    </update>
 </mapper>

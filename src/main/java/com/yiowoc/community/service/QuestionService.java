@@ -33,6 +33,7 @@ public class QuestionService {
             curPage = totalPage;
         }
         PaginationDTO paginationDTO = new PaginationDTO(totalPage, curPage);
+        if(totalPage == 0) return paginationDTO;
         Integer offset = (curPage - 1) * size;
         List<Question> questions = questionMapper.selectQuestionsPage(offset, size);
         List<QuestionDTO> questionDTOs = new ArrayList<>();
@@ -58,6 +59,7 @@ public class QuestionService {
             curPage = totalPage;
         }
         PaginationDTO paginationDTO = new PaginationDTO(totalPage, curPage);
+        if(totalPage == 0) return paginationDTO;
         Integer offset = (curPage - 1) * size;
         List<Question> questions = questionMapper.selectQuestionsPageByUserId(userId, offset, size);
         List<QuestionDTO> questionDTOs = new ArrayList<>();

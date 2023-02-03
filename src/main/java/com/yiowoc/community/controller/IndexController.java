@@ -15,7 +15,7 @@ public class IndexController {
 
     @GetMapping("/")
     public String getIndex(@RequestParam(name = "curPage", defaultValue = "1") Integer curPage,
-                           @RequestParam(name = "size", defaultValue = "5") Integer size, Model model) {
+                           @RequestParam(name = "size", defaultValue = "2") Integer size, Model model) {
         PaginationDTO paginationDTO = questionService.selectQuestionsWithUser(curPage, size);
         model.addAttribute("paginationDTO", paginationDTO);
         return "index";
