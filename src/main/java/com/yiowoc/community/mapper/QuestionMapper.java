@@ -9,6 +9,8 @@ import java.util.List;
 public interface QuestionMapper {
     public int insert(Question question);
     public List<Question> selectAllQuestions();
-    public List<Question> selectQuestionsByPage(Integer offset, Integer size);
-    public int selectAllCount();
+    public List<Question> selectQuestionsPage(Integer offset, Integer size);
+    public Integer selectAllCount();
+    public List<Question> selectQuestionsPageByUserId(Integer userId, Integer offset, Integer size);
+    public Integer selectCountByUserId(Integer userId);
 }

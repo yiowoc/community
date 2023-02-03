@@ -18,7 +18,7 @@ public class PaginationDTO {
     private Integer totalPage;
     private List<Integer> shownPages = new ArrayList<>();
 
-    public PaginationDTO(Integer totalPage, Integer curPage, Integer size) {
+    public PaginationDTO(Integer totalPage, Integer curPage) {
         this.curPage = curPage;
         this.totalPage = totalPage;
 
