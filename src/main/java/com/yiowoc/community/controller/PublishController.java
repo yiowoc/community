@@ -4,7 +4,6 @@ import com.yiowoc.community.dto.QuestionDTO;
 import com.yiowoc.community.model.Question;
 import com.yiowoc.community.model.User;
 import com.yiowoc.community.service.QuestionService;
-import com.yiowoc.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
