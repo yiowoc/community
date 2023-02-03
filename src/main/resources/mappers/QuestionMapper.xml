@@ -3,29 +3,33 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.yiowoc.community.mapper.QuestionMapper">
-    <!-- public int insert(Question question); -->
+    <!-- int insert(Question question); -->
     <insert id="insert" parameterType="question">
         insert into question (title, description, gmt_create, gmt_modified, creator, tag)
         values (#{title}, #{description}, #{gmtCreate}, #{gmtModified}, #{creator}, #{tag})
     </insert>
-    <!-- public List<Question> selectAllQuestions(); -->
+    <!-- List<Question> selectAllQuestions(); -->
     <select id="selectAllQuestions" resultType="question">
         select * from question
     </select>
-    <!-- public List<Question> selectQuestionsPage(Integer offset, Integer size); -->
+    <!-- List<Question> selectQuestionsPage(Integer offset, Integer size); -->
     <select id="selectQuestionsPage" resultType="question">
         select * from question limit #{offset}, #{size}
     </select>
-    <!-- public Integer selectAllCount(); -->
+    <!-- Integer selectAllCount(); -->
     <select id="selectAllCount" resultType="java.lang.Integer">
         select count(1) from question
     </select>
-    <!-- public Integer selectCountByUserId(Integer userId); -->
+    <!-- Integer selectCountByUserId(Integer userId); -->
     <select id="selectCountByUserId" resultType="java.lang.Integer">
         select count(1) from question where creator = #{userId}
     </select>
-    <!-- public List<Question> selectQuestionsPageByUserId(Integer userId, Integer offset, Integer size); -->
+    <!-- List<Question> selectQuestionsPageByUserId(Integer userId, Integer offset, Integer size); -->
     <select id="selectQuestionsPageByUserId" resultType="question">
         select * from question where creator = #{userId} limit #{offset}, #{size}
+    </select>
+    <!-- Question selectQuestionById(Integer id); -->
+    <select id="selectQuestionById" resultType="question">
+        select * from question where id = #{id}
     </select>
 </mapper>

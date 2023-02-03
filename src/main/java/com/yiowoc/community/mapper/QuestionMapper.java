@@ -7,10 +7,11 @@ import java.util.List;
 
 @Repository
 public interface QuestionMapper {
-    public int insert(Question question);
-    public List<Question> selectAllQuestions();
-    public List<Question> selectQuestionsPage(Integer offset, Integer size);
-    public Integer selectAllCount();
-    public List<Question> selectQuestionsPageByUserId(Integer userId, Integer offset, Integer size);
-    public Integer selectCountByUserId(Integer userId);
+    int insert(Question question);
+    List<Question> selectAllQuestions();
+    List<Question> selectQuestionsPage(Integer offset, Integer size);
+    Integer selectAllCount();
+    List<Question> selectQuestionsPageByUserId(Integer userId, Integer offset, Integer size);
+    Integer selectCountByUserId(Integer userId);
+    Question selectQuestionById(Integer id);
 }
