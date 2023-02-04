@@ -16,6 +16,9 @@ body {
     width: 40px;
     height: 40px;
 }
+.media-body {
+    padding-top: 10px;
+}
 
 .media-body-desc {
     font-size: 12px;
@@ -30,4 +33,28 @@ body {
 
 .jumbotron {
     margin: 50px;
+}
+
+.question-comment {
+    margin: 10px 0;
+}
+
+.btn-question-comment {
+    float: right;
+    margin-bottom: 10px;
+}
+
+.question-reply-menu {
+    color: #999;
+    margin-top: 5px;
+}
+
+.question-reply-menu .menu-icon {
+    margin-right: 6px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.question-reply-menu .menu-icon:hover {
+    color: #499ef3;
 }
