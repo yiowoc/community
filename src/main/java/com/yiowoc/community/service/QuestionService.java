@@ -4,6 +4,7 @@ import com.yiowoc.community.dto.PaginationDTO;
 import com.yiowoc.community.dto.QuestionDTO;
 import com.yiowoc.community.exception.CustomizeErrorCode;
 import com.yiowoc.community.exception.CustomizeException;
+import com.yiowoc.community.mapper.QuestionExtMapper;
 import com.yiowoc.community.mapper.QuestionMapper;
 import com.yiowoc.community.mapper.UserMapper;
 import com.yiowoc.community.model.Question;
@@ -21,6 +22,8 @@ import java.util.List;
 public class QuestionService {
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
     @Autowired
     private UserMapper userMapper;
 
@@ -91,7 +94,7 @@ public class QuestionService {
         paginationDTO.setQuestionDTOs(questionDTOs);
         return paginationDTO;
     }
-
+//    打开详情页面
     public QuestionDTO selectQuestionById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
         if(question == null) {
@@ -117,5 +120,12 @@ public class QuestionService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
         }
+    }
+
+    public void updateQuestionViewCount(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        questionExtMapper.updateViewCount(question);
     }
 }
