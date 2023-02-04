@@ -128,4 +128,11 @@ public class QuestionService {
         question.setViewCount(1);
         questionExtMapper.updateViewCount(question);
     }
+
+    public void updateQuestionCommentCount(Integer id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setCommentCount(1);
+        questionExtMapper.updateCommentCount(question);
+    }
 }

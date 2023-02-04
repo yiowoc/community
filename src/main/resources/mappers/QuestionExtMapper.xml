@@ -31,4 +31,11 @@
         set view_count = view_count + #{viewCount, jdbcType=INTEGER}
         where id = #{id}
     </update>
+    <!-- void updateCommentCount(Question question); -->
+    <update id="updateCommentCount" parameterType="question">
+        update question
+        set comment_count = comment_count + #{commentCount, jdbcType=INTEGER}
+        where id = #{id}
+    </update>
+
 </mapper>

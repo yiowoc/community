@@ -4,4 +4,6 @@ import com.yiowoc.community.model.Question;
 
 public interface QuestionExtMapper {
     void updateViewCount(Question question);
+
+    void updateCommentCount(Question question);
 }
