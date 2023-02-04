@@ -2,6 +2,8 @@ package com.yiowoc.community.service;
 
 import com.yiowoc.community.dto.PaginationDTO;
 import com.yiowoc.community.dto.QuestionDTO;
+import com.yiowoc.community.exception.CustomizeErrorCode;
+import com.yiowoc.community.exception.CustomizeException;
 import com.yiowoc.community.mapper.QuestionMapper;
 import com.yiowoc.community.mapper.UserMapper;
 import com.yiowoc.community.model.Question;
@@ -92,7 +94,9 @@ public class QuestionService {
 
     public QuestionDTO selectQuestionById(Integer id) {
         Question question = questionMapper.selectByPrimaryKey(id);
-//        Question question = questionMapper.selectQuestionById(id);
+        if(question == null) {
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         User user = userMapper.selectByPrimaryKey(questionDTO.getCreator());
@@ -108,8 +112,10 @@ public class QuestionService {
             questionMapper.insertSelective(question);
         } else {
             question.setGmtModified(System.currentTimeMillis());
-            questionMapper.updateByPrimaryKeySelective(question);
-//            questionMapper.update(question);
+            int updated = questionMapper.updateByPrimaryKeySelective(question);
+            if(updated != 1) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
         }
     }
 }
