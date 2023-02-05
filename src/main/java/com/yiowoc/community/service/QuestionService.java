@@ -1,9 +1,7 @@
 package com.yiowoc.community.service;
 
-import com.yiowoc.community.cache.TagCache;
 import com.yiowoc.community.dto.PaginationDTO;
 import com.yiowoc.community.dto.QuestionDTO;
-import com.yiowoc.community.dto.TagDTO;
 import com.yiowoc.community.exception.CustomizeErrorCode;
 import com.yiowoc.community.exception.CustomizeException;
 import com.yiowoc.community.mapper.QuestionExtMapper;
@@ -12,16 +10,13 @@ import com.yiowoc.community.mapper.UserMapper;
 import com.yiowoc.community.model.Question;
 import com.yiowoc.community.model.QuestionExample;
 import com.yiowoc.community.model.User;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {
@@ -36,9 +31,9 @@ public class QuestionService {
         return questionMapper.insertSelective(question);
     }
 
-    public PaginationDTO selectQuestionsWithUser(Integer curPage, Integer size) {
+    // 列出所有用户的问题数据用于首页
+    public PaginationDTO selectQuestionDTOs(Integer curPage, Integer size) {
         Integer totalCount = (int) questionMapper.countByExample(null);
-//        Integer totalCount = questionMapper.selectAllCount();
         Integer totalPage = totalCount % size == 0 ? totalCount / size : totalCount / size + 1;
         if(curPage < 1) {
             curPage = 1;
@@ -52,54 +47,48 @@ public class QuestionService {
         questionExample.createCriteria();
         questionExample.setOrderByClause("gmt_modified desc");
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
-//        List<Question> questions = questionMapper.selectQuestionsPage(offset, size);
         List<QuestionDTO> questionDTOs = new ArrayList<>();
         if(questions != null && questions.size() != 0) {
             for(Question question: questions) {
                 QuestionDTO questionDTO = new QuestionDTO();
                 BeanUtils.copyProperties(question, questionDTO);
                 User user = userMapper.selectByPrimaryKey(question.getCreator());
-//                User user = userMapper.selectById(question.getCreator());
                 questionDTO.setUser(user);
                 questionDTOs.add(questionDTO);
             }
         }
-        paginationDTO.setQuestionDTOs(questionDTOs);
+        paginationDTO.setData(questionDTOs);
         return paginationDTO;
     }
 
-    public PaginationDTO selectQuestionsWithUserByUserId(Integer userId, Integer curPage, Integer size) {
-        QuestionExample countExample = new QuestionExample();
-        countExample.createCriteria()
+    // 通过用户id找寻问题数据
+    public PaginationDTO selectQuestionDTOsByUserId(Integer userId, Integer curPage, Integer size) {
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria()
                 .andCreatorEqualTo(userId);
-        Integer totalCount = (int) questionMapper.countByExample(countExample);
-//        Integer totalCount = questionMapper.selectCountByUserId(userId);
+        Integer totalCount = (int) questionMapper.countByExample(questionExample);
         Integer totalPage = totalCount % size == 0 ? totalCount / size : totalCount / size + 1;
         if(curPage < 1) {
             curPage = 1;
         } else if(curPage > totalPage) {
             curPage = totalPage;
         }
-        PaginationDTO paginationDTO = new PaginationDTO(totalPage, curPage);
+        PaginationDTO<QuestionDTO> paginationDTO = new PaginationDTO(totalPage, curPage);
         if(totalPage == 0) return paginationDTO;
         Integer offset = (curPage - 1) * size;
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria()
-                        .andCreatorEqualTo(userId);
+        questionExample.setOrderByClause("gmt_modified desc");
         List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
-//        List<Question> questions = questionMapper.selectQuestionsPageByUserId(userId, offset, size);
         List<QuestionDTO> questionDTOs = new ArrayList<>();
         if(questions != null && questions.size() != 0) {
             for(Question question: questions) {
                 QuestionDTO questionDTO = new QuestionDTO();
                 BeanUtils.copyProperties(question, questionDTO);
                 User user = userMapper.selectByPrimaryKey(question.getCreator());
-//                User user = userMapper.selectById(question.getCreator());
                 questionDTO.setUser(user);
                 questionDTOs.add(questionDTO);
             }
         }
-        paginationDTO.setQuestionDTOs(questionDTOs);
+        paginationDTO.setData(questionDTOs);
         return paginationDTO;
     }
 //    打开详情页面

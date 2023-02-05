@@ -1,7 +1,9 @@
 package com.yiowoc.community.controller;
 
 import com.yiowoc.community.dto.PaginationDTO;
+import com.yiowoc.community.model.Notification;
 import com.yiowoc.community.model.User;
+import com.yiowoc.community.service.NotificationService;
 import com.yiowoc.community.service.QuestionService;
 import com.yiowoc.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,8 @@ public class ProfileController {
 
     @Autowired
     QuestionService questionService;
+    @Autowired
+    NotificationService notificationService;
 
     @GetMapping("/profile/{action}")
     public String getProfile(HttpServletRequest request, Model model,
@@ -31,12 +35,14 @@ public class ProfileController {
             return "redirect:/";
         }
         model.addAttribute("section", action);
+        PaginationDTO paginationDTO = null;
         if(action.equals("questions")) {
             model.addAttribute("sectionName", "我的问题");
+            paginationDTO = questionService.selectQuestionDTOsByUserId(user.getId(), curPage, size);
         } else if(action.equals("replies")) {
             model.addAttribute("sectionName", "最新回复");
+            paginationDTO = notificationService.selectNotificationDTOsByUserId(user.getId(), curPage, size);
         }
-        PaginationDTO paginationDTO = questionService.selectQuestionsWithUserByUserId(user.getId(), curPage, size);
         model.addAttribute("paginationDTO", paginationDTO);
         return "profile";
     }

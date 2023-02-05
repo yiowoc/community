@@ -8,8 +8,8 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class PaginationDTO {
-    private List<QuestionDTO> questionDTOs;
+public class PaginationDTO<T> {
+    private List<T> data;
     private boolean hasPreviousPage;
     private boolean hasFirstPage;
     private boolean hasNextPage;

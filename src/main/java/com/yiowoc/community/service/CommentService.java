@@ -2,6 +2,7 @@ package com.yiowoc.community.service;
 
 import com.yiowoc.community.dto.CommentDTO;
 import com.yiowoc.community.enums.CommentTypeEnum;
+import com.yiowoc.community.enums.NotificationTypeEnum;
 import com.yiowoc.community.exception.CustomizeErrorCode;
 import com.yiowoc.community.exception.CustomizeException;
 import com.yiowoc.community.mapper.*;
@@ -29,9 +30,11 @@ public class CommentService {
     CommentExtMapper commentExtMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    NotificationMapper notificationMapper;
 
     @Transactional
-    public void insertComment(Comment comment) {
+    public void insertComment(Comment comment, User commentator) {
         // 判断post数据是否合法，不合法直接跳转到error页面
         if(comment.getParentId() == null || comment.getParentId() == 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
@@ -46,7 +49,15 @@ public class CommentService {
             if(fathorComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+            // 判断问题是否存在-->注意由于只有二级评论，所以父评论的parentId一定是问题id
+            Question question = questionMapper.selectByPrimaryKey(fathorComment.getParentId());
+            if(question == null) {
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
+            // 插入评论并发送通知
             commentMapper.insertSelective(comment);
+            insertNotification(comment, fathorComment.getCommentator(), commentator.getName(), question.getTitle(), question.getId(), NotificationTypeEnum.REPLY_COMMENT);
+
             // 增加评论数
             fathorComment.setCommentCount(1);
             commentExtMapper.updateCommentCount(fathorComment);
@@ -56,13 +67,26 @@ public class CommentService {
             if(question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
+            // 插入评论并发送通知
             commentMapper.insertSelective(comment);
+            insertNotification(comment, question.getCreator(), commentator.getName(), question.getTitle(), question.getId(), NotificationTypeEnum.REPLY_QUESTION);
             // 添加评论数
             question.setCommentCount(1);
             questionExtMapper.updateCommentCount(question);
         }
-
     }
+    private void insertNotification(Comment comment, Integer receiver, String notifierName, String outerTitle, Integer outerId, NotificationTypeEnum notificationType) {
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setNotifier(comment.getCommentator());
+        notification.setReceiver(receiver);
+        notification.setType(notificationType.getType());
+        notification.setOuterId(outerId);
+        notification.setNotifierName(notifierName);
+        notification.setOuterTitle(outerTitle);
+        notificationMapper.insertSelective(notification);
+    }
+
     public List<CommentDTO> selectCommentByParentId(Integer id, CommentTypeEnum commentType) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()

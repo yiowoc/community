@@ -1,6 +1,8 @@
 package com.yiowoc.community.interceptor;
 
+import com.yiowoc.community.model.NotificationExample;
 import com.yiowoc.community.model.User;
+import com.yiowoc.community.service.NotificationService;
 import com.yiowoc.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     UserService userService;
+    @Autowired
+    NotificationService notificationService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -25,6 +29,8 @@ public class SessionInterceptor implements HandlerInterceptor {
                     User user = userService.selectUserByToken(token);
                     if(user != null) {
                         request.getSession().setAttribute("user", user);
+                        Long unreadCount = notificationService.getUnreadCount(user.getId());
+                        request.getSession().setAttribute("unreadCount", unreadCount);
                     } else {
                         return false;
                     }

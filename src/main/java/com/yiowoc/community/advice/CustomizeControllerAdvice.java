@@ -21,7 +21,7 @@ public class CustomizeControllerAdvice extends ResponseEntityExceptionHandler {
                             HttpServletRequest request,
                             HttpServletResponse response) {
         String contentType = request.getContentType();
-        if(contentType.equals("application/json")) {
+        if(contentType!= null && contentType.equals("application/json")) {
             ResultDTO resultDTO = null;
             if(e instanceof CustomizeException) {
                 resultDTO = ResultDTO.errorOf(((CustomizeException) e).getCode(),e.getMessage());
