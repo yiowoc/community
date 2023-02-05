@@ -63,6 +63,10 @@ body {
     color: #499ef3;
 }
 
+.question-tag {
+    margin-right: 5px;
+}
+
 .sub-replies {
     border-radius: 5px;
     margin-top: 10px;
@@ -78,6 +82,17 @@ body {
     margin-top: 20px;
 }
 
+.sub-replies .pull-right {
+    margin-bottom: 5px;
+}
+
 .sub-replies .btn {
     margin: 10px 0;
+}
+
+.related-questions {
+    line-height: 2em;
+    font-size: 14px;
+    list-style: none;
+    padding-left: 0;
 }

@@ -1,5 +1,6 @@
 package com.yiowoc.community.service;
 
+import com.mysql.cj.util.StringUtils;
 import com.yiowoc.community.dto.PaginationDTO;
 import com.yiowoc.community.dto.QuestionDTO;
 import com.yiowoc.community.exception.CustomizeErrorCode;
@@ -43,7 +44,10 @@ public class QuestionService {
         PaginationDTO paginationDTO = new PaginationDTO(totalPage, curPage);
         if(totalPage == 0) return paginationDTO;
         Integer offset = (curPage - 1) * size;
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(null, new RowBounds(offset, size));
+        QuestionExample questionExample = new QuestionExample();
+        questionExample.createCriteria();
+        questionExample.setOrderByClause("gmt_modified desc");
+        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
 //        List<Question> questions = questionMapper.selectQuestionsPage(offset, size);
         List<QuestionDTO> questionDTOs = new ArrayList<>();
         if(questions != null && questions.size() != 0) {
@@ -134,5 +138,14 @@ public class QuestionService {
         question.setId(id);
         question.setCommentCount(1);
         questionExtMapper.updateCommentCount(question);
+    }
+
+    public List<Question> selectRelatedQuestionByTag(QuestionDTO questionDTO) {
+        String regexp = questionDTO.getTag().replace(',', '|');
+        Question question = new Question();
+        question.setTag(regexp);
+        question.setId(questionDTO.getId());
+        List<Question> questions = questionExtMapper.selectRelated(question);
+        return questions;
     }
 }

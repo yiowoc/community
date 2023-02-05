@@ -3,6 +3,7 @@ package com.yiowoc.community.controller;
 import com.yiowoc.community.dto.CommentDTO;
 import com.yiowoc.community.dto.QuestionDTO;
 import com.yiowoc.community.enums.CommentTypeEnum;
+import com.yiowoc.community.model.Question;
 import com.yiowoc.community.service.CommentService;
 import com.yiowoc.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +27,11 @@ public class QuestionController {
                               Model model) {
         questionService.updateQuestionViewCount(id);
         QuestionDTO questionDTO = questionService.selectQuestionById(id);
-        model.addAttribute("questionDTO", questionDTO);
         List<CommentDTO> commentDTOs = commentService.selectCommentByParentId(id, CommentTypeEnum.QUESTION);
+        List<Question> relatedQuestions = questionService.selectRelatedQuestionByTag(questionDTO);
+        model.addAttribute("questionDTO", questionDTO);
         model.addAttribute("commentDTOs", commentDTOs);
+        model.addAttribute("relatedQuestions", relatedQuestions);
         return "question";
     }
 }
