@@ -1,7 +1,20 @@
+/**
+ * 发送评论
+ */
 function postComment() {
     var parentId = $("#question-comment-id").val();
-    var conetent = $("#question-comment-content").val();
-    if(!conetent) {
+    var content = $("#question-comment-content").val();
+    postCommentAjax(parentId, content, 1);
+}
+
+function postSubComment(e) {
+    var parentId = e.getAttribute("data-id");
+    var content = $("#sub-comment-" + parentId).val();
+    postCommentAjax(parentId, content, 2);
+}
+
+function postCommentAjax(parentId, content, type) {
+    if(!content) {
         alert("输入内容不能为空哦~");
         return;
     }
@@ -12,8 +25,8 @@ function postComment() {
         dataType: "json",
         data: JSON.stringify({
             "parentId": parentId,
-            "content": conetent,
-            "type": 1
+            "content": content,
+            "type": type
         }),
         success: function(res) {
             if(res.code == 200) {
@@ -31,5 +44,47 @@ function postComment() {
                 }
             }
         }
-    })
+    });
+}
+
+/**
+ * 展示二级评论
+ */
+function collapseComments(e) {
+    e.classList.toggle("active");
+    var id = e.getAttribute("data-id");
+    var subComment = $("#reply-" + id);
+    if(!subComment.hasClass("in")) {
+        if(subComment.children.length == 2) {
+            $.getJSON("/comment/" + id, function(res) {
+                $.each(res.data.reverse(), function (index, commentDTO) {
+                    var mediaLeftDiv = $("<div/>", {
+                        "class": "media-left"
+                    }).append($("<img/>", {
+                        "class": "media-object img-rounded",
+                        "src": commentDTO.user.avatarUrl
+                    }));
+                    var mediaBodyDiv = $("<div/>", {
+                        "class": "media-body"
+                    }).append($("<h5/>", {
+                        "class": "media-heading",
+                        "html": commentDTO.user.name
+                    })).append($("<div/>", {
+                        "html": commentDTO.content
+                    })).append($("<div/>", {
+                        "class": "question-reply-menu"
+                    }).append($("<span/>", {
+                        "class": "pull-right",
+                        "html": moment(commentDTO.gmtCreate).format("YYYY-MM-DD")
+                    })));
+                    var mediaDiv = $("<div/>", {
+                        "class": "media"
+                    }).append(mediaLeftDiv).append(mediaBodyDiv);
+                    subComment.prepend(mediaDiv);
+                });
+                // console.log(res);
+            });
+        }
+    }
+    subComment.toggleClass("in");
 }

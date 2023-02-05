@@ -63,11 +63,11 @@ public class CommentService {
         }
 
     }
-    public List<CommentDTO> selectCommentByParentId(Integer id) {
+    public List<CommentDTO> selectCommentByParentId(Integer id, CommentTypeEnum commentType) {
         CommentExample commentExample = new CommentExample();
         commentExample.createCriteria()
                         .andParentIdEqualTo(id)
-                                .andTypeEqualTo(CommentTypeEnum.QUESTION.getType());
+                                .andTypeEqualTo(commentType.getType());
         commentExample.setOrderByClause("gmt_modified desc");
         List<Comment> comments = commentMapper.selectByExample(commentExample);
         if(comments.size() == 0) {

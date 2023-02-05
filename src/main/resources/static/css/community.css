@@ -55,6 +55,29 @@ body {
     cursor: pointer;
 }
 
+.question-reply-menu .active {
+    color: #499ef3;
+}
+
 .question-reply-menu .menu-icon:hover {
     color: #499ef3;
+}
+
+.sub-replies {
+    border-radius: 5px;
+    margin-top: 10px;
+    padding: 15px 15px 60px 15px;
+    border: 1px solid #eee;
+}
+
+.sub-replies .media {
+    border-bottom: 1px solid #eee;
+}
+
+.sub-replies input {
+    margin-top: 20px;
+}
+
+.sub-replies .btn {
+    margin: 10px 0;
 }

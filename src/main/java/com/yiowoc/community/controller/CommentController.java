@@ -1,7 +1,9 @@
 package com.yiowoc.community.controller;
 
 import com.yiowoc.community.dto.CommentCreateDTO;
+import com.yiowoc.community.dto.CommentDTO;
 import com.yiowoc.community.dto.ResultDTO;
+import com.yiowoc.community.enums.CommentTypeEnum;
 import com.yiowoc.community.exception.CustomizeErrorCode;
 import com.yiowoc.community.model.Comment;
 import com.yiowoc.community.model.User;
@@ -10,11 +12,10 @@ import com.yiowoc.community.service.QuestionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class CommentController {
@@ -45,5 +46,12 @@ public class CommentController {
         comment.setCommentator(user.getId());
         commentService.insertComment(comment);
         return ResultDTO.okOf();
+    }
+
+    @ResponseBody
+    @GetMapping("/comment/{id}")
+    public ResultDTO<List<CommentDTO>> getSubCommentByParentId(@PathVariable(name = "id") Integer id) {
+        List<CommentDTO> commentDTOs = commentService.selectCommentByParentId(id, CommentTypeEnum.COMMENT);
+        return ResultDTO.okOf(commentDTOs);
     }
 }
