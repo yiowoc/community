@@ -1,9 +1,11 @@
 package com.yiowoc.community.controller;
 
+import com.yiowoc.community.cache.TagCache;
 import com.yiowoc.community.dto.QuestionDTO;
 import com.yiowoc.community.model.Question;
 import com.yiowoc.community.model.User;
 import com.yiowoc.community.service.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +22,8 @@ public class PublishController {
     private QuestionService questionService;
 
     @GetMapping("/publish")
-    public String getPublish() {
+    public String getPublish(Model model) {
+        model.addAttribute("tagDTOs", TagCache.get());
         return "publish";
     }
 
@@ -34,6 +37,7 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
+        model.addAttribute("tagDTOs", TagCache.get());
         if(title == null || title == "") {
             model.addAttribute("error", "标题不能为空");
         } else if(description == null || description == "") {
@@ -41,18 +45,23 @@ public class PublishController {
         } else if(tag == null || tag == "") {
             model.addAttribute("error", "标签不能为空");
         } else {
-            User user = (User) request.getSession().getAttribute("user");
-            if(user == null) {
-                model.addAttribute("error", "用户未登录");
+            String invalidString = TagCache.filterTagsInvalid(tag);
+            if(!StringUtils.isBlank(invalidString)) {
+                model.addAttribute("error", "输入非法标签：" + invalidString);
             } else {
-                Question question = new Question();
-                question.setId(id);
-                question.setTitle(title);
-                question.setDescription(description);
-                question.setTag(tag);
-                question.setCreator(user.getId());
-                questionService.insertOrUpdateQuestion(question);
-                return "redirect:/";
+                User user = (User) request.getSession().getAttribute("user");
+                if(user == null) {
+                    model.addAttribute("error", "用户未登录");
+                } else {
+                    Question question = new Question();
+                    question.setId(id);
+                    question.setTitle(title);
+                    question.setDescription(description);
+                    question.setTag(tag);
+                    question.setCreator(user.getId());
+                    questionService.insertOrUpdateQuestion(question);
+                    return "redirect:/";
+                }
             }
         }
         return "publish";
@@ -67,6 +76,7 @@ public class PublishController {
             model.addAttribute("description", questionDTO.getDescription());
             model.addAttribute("tag", questionDTO.getTag());
         }
+        model.addAttribute("tagDTOs", TagCache.get());
         return "publish";
     }
 }

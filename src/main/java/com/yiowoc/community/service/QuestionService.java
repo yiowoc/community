@@ -1,8 +1,9 @@
 package com.yiowoc.community.service;
 
-import com.mysql.cj.util.StringUtils;
+import com.yiowoc.community.cache.TagCache;
 import com.yiowoc.community.dto.PaginationDTO;
 import com.yiowoc.community.dto.QuestionDTO;
+import com.yiowoc.community.dto.TagDTO;
 import com.yiowoc.community.exception.CustomizeErrorCode;
 import com.yiowoc.community.exception.CustomizeException;
 import com.yiowoc.community.mapper.QuestionExtMapper;
@@ -11,13 +12,16 @@ import com.yiowoc.community.mapper.UserMapper;
 import com.yiowoc.community.model.Question;
 import com.yiowoc.community.model.QuestionExample;
 import com.yiowoc.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionService {

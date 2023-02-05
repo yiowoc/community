@@ -88,3 +88,19 @@ function collapseComments(e) {
     }
     subComment.toggleClass("in");
 }
+
+function selectTag(e) {
+    var tag = e.getAttribute("data-tag");
+    var prev = $(".tag-input").val();
+    if(prev.indexOf(tag) == -1) {
+        if(prev == null || prev.length == 0) {
+            $(".tag-input").val(tag);
+        } else {
+            $(".tag-input").val(prev + "," + tag);
+        }
+    }
+}
+
+function showTagSelect() {
+    $(".publish-tag-select").show();
+}
