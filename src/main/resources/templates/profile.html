@@ -24,7 +24,10 @@
                 </div>
                 <div class="media-body">
                     <h4 class="media-heading"><span th:text="${question.title}"></span></h4>
-                    <span class="media-body-desc"><span th:text="${question.commentCount}"></span> 个回复 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span></span>
+                    <a class="menu-edit-question" th:href="@{'/publish/'+${question.id}}" th:if="${session.user != null && session.user.id == question.creator}">
+                        <span class="glyphicon glyphicon-pencil" aria-hidden="true">编辑</span> •
+                    </a>
+                    <span class="media-body-desc"><span th:text="${question.commentCount}"></span>个回复 • <span th:text="${question.viewCount}"></span> 次浏览 • <span th:text="${#dates.format(question.gmtCreate, 'yyyy-MM-dd HH:mm')}"></span></span>
                 </div>
             </div>
             <nav aria-label="Page navigation">

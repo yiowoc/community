@@ -65,6 +65,8 @@ body {
 
 .question-tag {
     margin-right: 5px;
+    line-height: 3em;
+    white-space: normal;
 }
 
 .sub-replies {
