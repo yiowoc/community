@@ -36,7 +36,7 @@ function postCommentAjax(parentId, content, type) {
                 if(res.code == 2003) {
                     var confired = confirm(res.message);
                     if(confired) {
-                        window.open("https://github.com/login/oauth/authorize?client_id=e674c1ab3b3235e81279&redirect_uri=http://localhost:8887/callback&scope=user");
+                        window.open("https://github.com/login/oauth/authorize?client_id=e674c1ab3b3235e81279&redirect_uri=" + document.location.origin + "/callback&scope=user");
                         localStorage.setItem("closable", "true");
                     }
                 } else {
