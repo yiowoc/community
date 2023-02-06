@@ -53,7 +53,7 @@
     <select id="countBySearch" parameterType="com.yiowoc.community.dto.QuestionSearchDTO" resultType="java.lang.Integer">
         select count(1) from question
         <where>
-            <if test="search != null">
+            <if test="search != null and search != ''">
                 and title regexp #{search}
             </if>
         </where>
@@ -62,7 +62,7 @@
     <select id="selectBySearch" parameterType="com.yiowoc.community.dto.QuestionSearchDTO" resultType="question">
         select * from question
         <where>
-            <if test="search != null">
+            <if test="search != null and search != ''">
                 and title regexp #{search}
             </if>
         </where>
