@@ -27,7 +27,8 @@ public class CommentController {
 
     @ResponseBody
     @PostMapping("/comment")
-    public ResultDTO insertComment(@RequestBody CommentCreateDTO commentCreateDTO,
+    //public ResultDTO insertComment(@RequestBody CommentCreateDTO commentCreateDTO,
+    public Object insertComment(@RequestBody CommentCreateDTO commentCreateDTO,
                                    HttpServletRequest request) {
         User user = (User) request.getSession().getAttribute("user");
         // 用json传值的方式传输错误信息而不是直接跳转到error页面，会更加温和，同时这类信息可以用ResultDTO来表示
