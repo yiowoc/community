@@ -2,6 +2,7 @@ package com.yiowoc.community.service;
 
 import com.yiowoc.community.dto.PaginationDTO;
 import com.yiowoc.community.dto.QuestionDTO;
+import com.yiowoc.community.dto.QuestionSearchDTO;
 import com.yiowoc.community.exception.CustomizeErrorCode;
 import com.yiowoc.community.exception.CustomizeException;
 import com.yiowoc.community.mapper.QuestionExtMapper;
@@ -10,6 +11,7 @@ import com.yiowoc.community.mapper.UserMapper;
 import com.yiowoc.community.model.Question;
 import com.yiowoc.community.model.QuestionExample;
 import com.yiowoc.community.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +34,13 @@ public class QuestionService {
     }
 
     // 列出所有用户的问题数据用于首页
-    public PaginationDTO selectQuestionDTOs(Integer curPage, Integer size) {
-        Integer totalCount = (int) questionMapper.countByExample(null);
+    public PaginationDTO selectQuestionDTOs(Integer curPage, Integer size, String search) {
+        if(!StringUtils.isBlank(search)) {
+            String regexp = search.replace(' ', '|');
+        }
+        QuestionSearchDTO questionSearchDTO = new QuestionSearchDTO();
+        questionSearchDTO.setSearch(search);
+        Integer totalCount = questionExtMapper.countBySearch(questionSearchDTO);
         Integer totalPage = totalCount % size == 0 ? totalCount / size : totalCount / size + 1;
         if(curPage < 1) {
             curPage = 1;
@@ -42,11 +49,10 @@ public class QuestionService {
         }
         PaginationDTO paginationDTO = new PaginationDTO(totalPage, curPage);
         if(totalPage == 0) return paginationDTO;
-        Integer offset = (curPage - 1) * size;
-        QuestionExample questionExample = new QuestionExample();
-        questionExample.createCriteria();
-        questionExample.setOrderByClause("gmt_modified desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        //Integer offset = (curPage - 1) * size;
+        questionSearchDTO.setPage(curPage);
+        questionSearchDTO.setSize(size);
+        List<Question> questions = questionExtMapper.selectBySearch(questionSearchDTO);
         List<QuestionDTO> questionDTOs = new ArrayList<>();
         if(questions != null && questions.size() != 0) {
             for(Question question: questions) {
