@@ -49,8 +49,9 @@ public class QuestionService {
         }
         PaginationDTO paginationDTO = new PaginationDTO(totalPage, curPage);
         if(totalPage == 0) return paginationDTO;
-        //Integer offset = (curPage - 1) * size;
-        questionSearchDTO.setPage(curPage);
+        Integer offset = (curPage - 1) * size;
+        //questionSearchDTO.setPage(curPage);
+        questionSearchDTO.setPage(offset);
         questionSearchDTO.setSize(size);
         List<Question> questions = questionExtMapper.selectBySearch(questionSearchDTO);
         List<QuestionDTO> questionDTOs = new ArrayList<>();
