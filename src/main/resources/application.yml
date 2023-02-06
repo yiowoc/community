@@ -28,3 +28,14 @@ aliyun:
     accessKeySecret: xnIOm6RfgbdZqtd9StIC4OCFbaHtyK
     bucketName: yiowoc-community
     expires: 600000
+
+logging:
+  file:
+    path: logs/
+  level:
+    root: info
+    com.yiowoc.community.mapper: debug
+  logback:
+    rollingpolicy:
+      max-file-size: 200MB
+      max-history: 30
