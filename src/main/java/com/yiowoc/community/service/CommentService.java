@@ -56,7 +56,7 @@ public class CommentService {
             }
             // 插入评论并发送通知
             commentMapper.insertSelective(comment);
-            insertNotification(comment, fathorComment.getCommentator(), commentator.getName(), question.getTitle(), question.getId(), NotificationTypeEnum.REPLY_COMMENT);
+            insertNotification(fathorComment.getCommentator(), commentator.getName(), NotificationTypeEnum.REPLY_COMMENT, question, comment.getCommentator());
 
             // 增加评论数
             fathorComment.setCommentCount(1);
@@ -69,21 +69,24 @@ public class CommentService {
             }
             // 插入评论并发送通知
             commentMapper.insertSelective(comment);
-            insertNotification(comment, question.getCreator(), commentator.getName(), question.getTitle(), question.getId(), NotificationTypeEnum.REPLY_QUESTION);
+            insertNotification(question.getCreator(), commentator.getName(), NotificationTypeEnum.REPLY_QUESTION, question, comment.getCommentator());
             // 添加评论数
             question.setCommentCount(1);
             questionExtMapper.updateCommentCount(question);
         }
     }
-    private void insertNotification(Comment comment, Integer receiver, String notifierName, String outerTitle, Integer outerId, NotificationTypeEnum notificationType) {
+    private void insertNotification(Integer receiver, String notifierName, NotificationTypeEnum notificationType, Question question, Integer notifier) {
+        if(receiver == notifier) {
+            return;
+        }
         Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
-        notification.setNotifier(comment.getCommentator());
+        notification.setNotifier(notifier);
         notification.setReceiver(receiver);
         notification.setType(notificationType.getType());
-        notification.setOuterId(outerId);
+        notification.setOuterId(question.getId());
         notification.setNotifierName(notifierName);
-        notification.setOuterTitle(outerTitle);
+        notification.setOuterTitle(question.getTitle());
         notificationMapper.insertSelective(notification);
     }
 

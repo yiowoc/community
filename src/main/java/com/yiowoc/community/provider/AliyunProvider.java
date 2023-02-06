@@ -29,8 +29,7 @@ public class AliyunProvider {
 
 
     public String uploadFile(String objectName, InputStream content) {
-
-        //String[] filePaths = fileName.split(".");
+        //String[] filePaths = objectName.split(".");
         //if(filePaths.length == 1) return;
         //String uploadFileName = UUID.randomUUID().toString() + "." + filePaths[filePaths.length - 1];
 

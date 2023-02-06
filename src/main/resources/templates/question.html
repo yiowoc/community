@@ -90,15 +90,27 @@
             <div id="question-comment-section">
                 <h4>提交回复</h4>
                 <hr />
-                <div class="media">
+                <div class="media" th:if="${session.user != null}">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-rounded" th:src="${questionDTO.user.avatarUrl}">
+                            <img class="media-object img-rounded" th:src="${session.user.avatarUrl}">
                         </a>
                     </div>
                     <div class="media-body">
                         <h5 class="media-heading">
-                            <span th:text="${questionDTO.user.name}"></span>
+                            <span th:text="${session.user.name}"></span>
+                        </h5>
+                    </div>
+                </div>
+                <div class="media" th:if="${session.user == null}">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-rounded" src="/images/default_avatar.png">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading">
+                            <span>匿名用户</span>
                         </h5>
                     </div>
                 </div>
