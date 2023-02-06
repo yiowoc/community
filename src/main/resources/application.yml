@@ -3,8 +3,8 @@ server:
 
 github:
   client:
-    id: e674c1ab3b3235e81279
-    secret: 45fe8abec340a15ebe6681f8b214bde4e4c8739f
+    id: xxx
+    secret: xxx
   redirect:
     uri: http://localhost:8887/callback
 
@@ -14,7 +14,7 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/community?characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
       username: root
-      password: 5ouch5ouch
+      password: xxx
 mybatis:
   mapper-locations: classpath:mappers/*Mapper.xml
   type-aliases-package: com.yiowoc.community.model
@@ -23,10 +23,10 @@ mybatis:
 
 aliyun:
   file:
-    endpoint: oss-cn-chengdu.aliyuncs.com
-    accessKeyId: LTAI5t7RDsigskeyqQxMDWV1
-    accessKeySecret: xnIOm6RfgbdZqtd9StIC4OCFbaHtyK
-    bucketName: yiowoc-community
+    endpoint: xxx
+    accessKeyId: xxx
+    accessKeySecret: xxx
+    bucketName: xxx
     expires: 600000
 
 logging:
